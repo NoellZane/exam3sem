@@ -23,7 +23,7 @@ public class Booking implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private int id;
     
     @Column(name = "start_date", length = 16)
     private String startDate;
@@ -51,11 +51,11 @@ public class Booking implements Serializable {
     public Booking() {
     }
         
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 

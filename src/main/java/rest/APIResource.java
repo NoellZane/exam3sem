@@ -34,7 +34,7 @@ public class APIResource {
     @Path("sequential")
     @Produces({MediaType.APPLICATION_JSON})
     public String fetchSequential() throws IOException{
-        HotelDTO result = Fetcher.responseSequential();
+        HotelDTO[] result = Fetcher.responseSequential();
         String resultJSON = GSON.toJson(result);
         cachedReponse = resultJSON;
         return resultJSON;
@@ -44,7 +44,7 @@ public class APIResource {
     @Path("parallel")
     @Produces({MediaType.APPLICATION_JSON})
     public String fetchParallel() throws IOException, ExecutionException, InterruptedException, TimeoutException{
-        HotelDTO result = Fetcher.responseParallel(es, GSON);
+        HotelDTO[] result = Fetcher.responseParallel(es, GSON);
       String resultJSON = GSON.toJson(result);
         cachedReponse = resultJSON;
         return resultJSON;

@@ -11,7 +11,7 @@ package dtos;
  */
 public class HotelDTO {
 
-    private Integer id;
+    private int id;
     private String name;
     private String address;
     private String phone;
@@ -19,7 +19,7 @@ public class HotelDTO {
     private String content;
     private String url;
 
-    public HotelDTO(Integer id, String name, String address, String phone, String price, String content, String url) {
+    public HotelDTO(int id, String name, String address, String phone, String price, String content, String url) {
         this.id = id;
         this.name = name;
         this.address = address;
@@ -29,11 +29,11 @@ public class HotelDTO {
         this.url = url;
     }
 
-    public Integer getId() {
+    public int getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(int id) {
         this.id = id;
     }
 
