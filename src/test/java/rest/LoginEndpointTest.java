@@ -1,6 +1,6 @@
 package rest;
 
-import entities.User;
+import entities.Customer;
 import entities.Role;
 
 import io.restassured.RestAssured;
@@ -66,16 +66,16 @@ public class LoginEndpointTest {
         try {
             em.getTransaction().begin();
             //Delete existing users and roles to get a "fresh" database
-            em.createQuery("delete from User").executeUpdate();
+            em.createQuery("delete from Customer").executeUpdate();
             em.createQuery("delete from Role").executeUpdate();
 
             Role userRole = new Role("user");
             Role adminRole = new Role("admin");
-            User user = new User("user", "test");
+            Customer user = new Customer("user","user", "test","123");
+            Customer admin = new Customer("admin","admin", "test","456");
+            Customer both = new Customer("user_admin","user_admin", "test","789");
             user.addRole(userRole);
-            User admin = new User("admin", "test");
             admin.addRole(adminRole);
-            User both = new User("user_admin", "test");
             both.addRole(userRole);
             both.addRole(adminRole);
             em.persist(userRole);

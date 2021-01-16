@@ -2,7 +2,7 @@ package rest;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import dtos.CustomDTO;
+import dtos.HotelDTO;
 import fetch.Fetcher;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
@@ -34,25 +34,27 @@ public class APIResource {
     @Path("sequential")
     @Produces({MediaType.APPLICATION_JSON})
     public String fetchSequential() throws IOException{
-        String result = Fetcher.responseSequential();
-        cachedReponse = result;
-        return result;
+        HotelDTO result = Fetcher.responseSequential();
+        String resultJSON = GSON.toJson(result);
+        cachedReponse = resultJSON;
+        return resultJSON;
     }
     
     @GET
     @Path("parallel")
     @Produces({MediaType.APPLICATION_JSON})
     public String fetchParallel() throws IOException, ExecutionException, InterruptedException, TimeoutException{
-        String result = Fetcher.responseParallel(es, GSON);
-        cachedReponse = result;
-        return result;
+        HotelDTO result = Fetcher.responseParallel(es, GSON);
+      String resultJSON = GSON.toJson(result);
+        cachedReponse = resultJSON;
+        return resultJSON;
     }
     
     @GET
     @Path("cached")
     @Produces({MediaType.APPLICATION_JSON})
     public String getCachedResponse(){
-    CustomDTO customDTO = GSON.fromJson(cachedReponse, CustomDTO.class);
-    return GSON.toJson(customDTO);    
+    HotelDTO hotelDTO = GSON.fromJson(cachedReponse, HotelDTO.class);
+    return GSON.toJson(hotelDTO);    
     }
 }
