@@ -113,7 +113,8 @@ public class CustomerFacade {
         Customer customer = em.find(Customer.class, customerUsername);
         Hotel hotel = em.find(Hotel.class, hotelID);
         if(hotel == null){
-            hotel = new Hotel(Fetcher.responseParallel(threadPool, GSON)); //Added constructor for hotel that takes a hotelDTO
+            hotel = new Hotel(Fetcher.responseParallelHotelByID(threadPool, GSON,hotelID)); //Added constructor for hotel that takes a hotelDTO
+            em.persist(hotel);
         }
         Booking addedBooking = new Booking(startDate, numberOfNights, customer, hotel);
         if(startDate.length()== 0){

@@ -101,7 +101,7 @@ public class CustomerResource {
     }
     
     
-//    
+////    
 //    @PUT
 //    @Produces({MediaType.APPLICATION_JSON})
 //    @Consumes({MediaType.APPLICATION_JSON})
@@ -114,7 +114,7 @@ public class CustomerResource {
 //        CustomerDTO editedUser = facade.editUser(uToEdit);
 //        return GSON.toJson(editedUser);
 //    }
-//    
+    
 //    @DELETE
 //    @Produces({MediaType.APPLICATION_JSON})
 //    @Path("{username}")

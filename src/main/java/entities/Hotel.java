@@ -28,13 +28,15 @@ public class Hotel implements Serializable {
     private String name;
     @Column(name = "address", length = 50)
     private String address;
+    @Column(name = "city", length = 50)
+    private String city;
     @Column(name = "phone", length = 25)
     private String phone;
     @Column(name = "price", length = 10)
     private String price;
     @Column(name = "content")
     private String content;
-    @Column(name = "URL", length = 25)
+    @Column(name = "url",length = 100)
     private String url;
     
     @OneToMany(mappedBy = "hotel", cascade = CascadeType.PERSIST)
@@ -51,10 +53,11 @@ public class Hotel implements Serializable {
         this.id = id;
     }
 
-    public Hotel(Integer id, String name, String address, String phone, String price, String content, String url) {
+    public Hotel(Integer id, String name, String address,String city, String phone, String price, String content, String url) {
         this.id = id;
         this.name = name;
         this.address = address;
+        this.city = city;
         this.phone = phone;
         this.price = price;
         this.content = content;
@@ -65,6 +68,7 @@ public class Hotel implements Serializable {
         this.id = dto.getId();
         this.name = dto.getName();
         this.address = dto.getAddress();
+        this.city = dto.getTitle(); //Title is the name of city in the api
         this.phone = dto.getPhone();
         this.price = dto.getPrice();
         this.content = dto.getContent();
@@ -87,6 +91,14 @@ public class Hotel implements Serializable {
 
     public void setAddress(String address) {
         this.address = address;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getPhone() {

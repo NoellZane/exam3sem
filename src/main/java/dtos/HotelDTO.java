@@ -14,15 +14,17 @@ public class HotelDTO {
     private int id;
     private String name;
     private String address;
+    private String title; //This is the city
     private String phone;
     private String price;
     private String content;
     private String url;
 
-    public HotelDTO(int id, String name, String address, String phone, String price, String content, String url) {
+    public HotelDTO(int id, String name, String address,String title, String phone, String price, String content, String url) {
         this.id = id;
         this.name = name;
         this.address = address;
+        this.title = title;
         this.phone = phone;
         this.price = price;
         this.content = content;
@@ -52,6 +54,16 @@ public class HotelDTO {
     public void setAddress(String address) {
         this.address = address;
     }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+    
+    
 
     public String getPhone() {
         return phone;

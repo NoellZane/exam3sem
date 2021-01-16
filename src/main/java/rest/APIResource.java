@@ -13,6 +13,7 @@ import java.util.concurrent.TimeoutException;
 import javax.persistence.EntityManagerFactory;
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
@@ -31,25 +32,32 @@ public class APIResource {
     }
     
     @GET
-    @Path("sequential")
+    @Path("sequential/all")
     @Produces({MediaType.APPLICATION_JSON})
-    public String fetchSequential() throws IOException{
-        HotelDTO[] result = Fetcher.responseSequential();
+    public String fetchSequentialAll() throws IOException{
+        HotelDTO[] result = Fetcher.responseSequentialAllHotels();
         String resultJSON = GSON.toJson(result);
         cachedReponse = resultJSON;
         return resultJSON;
     }
     
     @GET
-    @Path("parallel")
+    @Path("parallel/all")
     @Produces({MediaType.APPLICATION_JSON})
-    public String fetchParallel() throws IOException, ExecutionException, InterruptedException, TimeoutException{
-        HotelDTO[] result = Fetcher.responseParallel(es, GSON);
+    public String fetchParallelAll() throws IOException, ExecutionException, InterruptedException, TimeoutException{
+        HotelDTO[] result = Fetcher.responseParallelAllHotels(es, GSON);
       String resultJSON = GSON.toJson(result);
         cachedReponse = resultJSON;
         return resultJSON;
     }
-    
+    @GET
+    @Path("parallel/{id}")
+    @Produces({MediaType.APPLICATION_JSON})
+    public String fetchParallelByID(@PathParam("id") int id) throws IOException{
+        HotelDTO result = Fetcher.responseSequentialHotelByID(id);
+        String resultJSON = GSON.toJson(result);
+        return resultJSON;
+    }
     @GET
     @Path("cached")
     @Produces({MediaType.APPLICATION_JSON})
