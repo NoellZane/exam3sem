@@ -35,7 +35,7 @@ function apiFacade() {
         password: password,
       });
 
-    return fetch(URL + "/api/login", options)
+    return fetch(URL + "api/login", options)
       .then(handleHttpErrors)
       .then((res) => {
         setToken(res.token); //This sets token in the local storage
@@ -52,14 +52,9 @@ const fetchRoles = roles => {
   else if (roles.includes("user")) userType = "user"; 
   else if (roles.includes("admin")) userType = "admin";
   const options = makeOptions("GET", true); //True adds the token 
-  return fetch(URL + "/api/info/"+ userType, options).then(handleHttpErrors); //Uses the right endpoint depending on what role the user has
+  return fetch(URL + "api/info/"+ userType, options).then(handleHttpErrors); //Uses the right endpoint depending on what role the user has
 };
-function getAllUsers(){
-  const options = makeOptions("GET", true); //True adds the token 
 
-  return fetch(userURL + "allusers",options) //Returns promise
-  .then(handleHttpErrors);
- }
  /* ------------------ CRUD ------------------ */
  function addUser(user){
    let options = makeOptions("POST",false,user,)
@@ -69,7 +64,7 @@ function getAllUsers(){
 
 function deleteUser(username) {
   let options = makeOptions("DELETE",true,username);
-  return fetch(userURL+/admin/ + username, options)
+  return fetch(userURL+'admin/' + username, options)
   .then(handleHttpErrors);
 }
  /* ------------------ Options ------------------ */
@@ -94,6 +89,38 @@ const makeOptions= (method,addToken,body) =>{
   const fetchData = (strategy)  => {
     return fetch(`${fetchURL}${strategy}`).then(handleHttpErrors);
   } 
+  function getAllUsers(){
+    const options = makeOptions("GET", true); //True adds the token 
+  
+    return fetch(userURL + "allusers",options) //Returns promise
+    .then(handleHttpErrors);
+   }
+  function getAllBookingsByCustomer(username){
+    const options = makeOptions("GET", true); //True adds the token 
+  
+    return fetch(userURL + "allbookingsbycustomer/"+username,options) //Returns promise
+    .then(handleHttpErrors);
+   }
+  function getAllBookings(){
+    const options = makeOptions("GET", true); //True adds the token 
+  
+    return fetch(userURL + "allbookings",options) //Returns promise
+    .then(handleHttpErrors);
+   }
+
+
+ /* ------------------ Booking ------------------ */
+ function addBooking(booking){
+  let options = makeOptions("POST",true,booking)
+ return fetch(userURL+"booking",options) //Returns promise
+ .then(handleHttpErrors);
+ }
+ function deleteBooking(id) {
+  let options = makeOptions("DELETE",true,id);
+  return fetch(userURL+'admin/booking/' + id, options)
+  .then(handleHttpErrors);
+}
+
 
 
  return {
@@ -105,9 +132,14 @@ const makeOptions= (method,addToken,body) =>{
      logout,
      fetchRoles,
      getAllUsers,
+     addBooking,
      addUser,
      deleteUser,
-     fetchData
+     fetchData,
+     addBooking,
+     deleteBooking,
+     getAllBookings,
+     getAllBookingsByCustomer
  }
 }
 const facade = apiFacade();

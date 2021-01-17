@@ -3,26 +3,46 @@ import facade from "./apiFacade";
 import "./App.css"
 import Home from "./components/Home";
 import NoMatch from "./components/NoMatch";
-import Header from "./components/Header";
 import Register from "./components/Register";
 import Fetch from "./components/Fetch";
 import Admin from "./components/Admin";
+import Booking from "./components/Booking";
+import CustomerPage from "./components/CustomerPage.js";
 import { LogIn, LoggedIn } from "./components/Login.js";
 
 import {
   BrowserRouter as Router,
   Switch,
   Route,
+  useLocation,
+  Redirect,
+  NavLink
 } from "react-router-dom";
-  
+function Header({loggedIn, roles}){
+
+  return(
+      <ul className="header">
+      <li><NavLink exact activeClassName="selected" to="/">Home</NavLink></li>
+      {<li><NavLink activeClassName="active" to="/login">Log-in/out</NavLink></li>}
+      {/* <li><NavLink activeClassName="selected" to="/login">Login</NavLink></li> */}
+      {!loggedIn && <li><NavLink activeClassName="selected" to="/register">Register</NavLink></li>}
+      {loggedIn && <li><NavLink activeClassName="selected" to="/customer">Customer Page</NavLink></li>}
+      {loggedIn && <li><NavLink activeClassName="selected" to="/booking">Booking</NavLink></li>}
+      {loggedIn &&<li><NavLink activeClassName="selected" to="/fetch/sequential">View Hotels Sequential</NavLink></li>}
+      {loggedIn &&<li><NavLink activeClassName="selected" to="/fetch/parallel">View Hotels Parallel</NavLink></li>}
+      {roles==='["admin"]' && <li><NavLink activeClassName="selected" to="/admin">Admin</NavLink></li>}
+      </ul>
+  );
+  }
 
 function App() {
   const [loggedIn, setLoggedIn] = useState(false)
   const [roles, setRoles] = useState([]);
-
   const logout = () => {    
     facade.logout()
-    setLoggedIn(false) } 
+    setLoggedIn(false)
+    setRoles("");
+   } 
 
   const login = (user, pass) => { 
     facade.login(user,pass,setRoles)
@@ -40,7 +60,12 @@ function App() {
  
     return(
       <div>
-  <Header />
+  <Header 
+   loggedIn={loggedIn}
+   setLoggedIn={setLoggedIn}
+   roles={roles}
+   setRoles={setRoles}
+    />
   <Switch>
     <Route exact path="/">
       <Home />
@@ -55,11 +80,17 @@ function App() {
     <Route path ="/register">
       <Register />
     </Route>
+    <Route path ="/customer">
+      <CustomerPage />
+    </Route>
+    <Route path ="/booking">
+      <Booking />
+    </Route>
     <Route path ="/fetch/:strategy">
       <Fetch />
     </Route>
     <Route>
-      <Admin />
+      <Admin/>
     </Route>
     <Route>
       <NoMatch/>

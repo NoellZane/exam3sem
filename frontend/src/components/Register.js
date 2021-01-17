@@ -7,10 +7,8 @@ export default function Register() {
   const [message, setMessage] = useState("");
 
   function addUser() {
-    console.log(user);
     if (user.password === repeatPassword) {
-      facade
-        .addUser(user)
+      facade.addUser(user)
         .then((data) => {
           console.log("User created.");
           setMessage("User created!");
