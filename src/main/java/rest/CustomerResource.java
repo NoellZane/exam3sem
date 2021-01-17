@@ -130,6 +130,16 @@ public class CustomerResource {
     public String getAllCustomers() {
         return GSON.toJson(facade.getAllCustomers());
     }
+    //Ain't quite working either
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("allbookingsbycustomer/{username}")
+    @RolesAllowed({"user", "admin"})
+    public String getAllBookingsByCustomer(@PathParam("username") String username) {
+//        username = securityContext.getUserPrincipal().getName();
+        System.out.println(username);
+        return GSON.toJson(facade.getAllBookingsByCustomer(username));
+    }
     
     @GET
     @Produces(MediaType.APPLICATION_JSON)

@@ -22,6 +22,7 @@ import java.util.concurrent.TimeoutException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
+import javax.ws.rs.core.SecurityContext;
 import security.errorhandling.AuthenticationException;
 
 /**
@@ -33,8 +34,9 @@ public class CustomerFacade {
     private static CustomerFacade instance;
     private static ExecutorService threadPool = Executors.newCachedThreadPool();
     private static Gson GSON = new GsonBuilder().setPrettyPrinting().create();
+    private static SecurityContext securityContext;
 
-    ;
+   
 
     private CustomerFacade() {
     }
@@ -167,7 +169,24 @@ public class CustomerFacade {
         }
 
     }
-
+//Ain't quite working
+    public List<BookingDTO> getAllBookingsByCustomer(String username) {
+        {
+            EntityManager em = emf.createEntityManager();
+            List<BookingDTO> bookingDTOs = new ArrayList<>();
+            try {
+                em.getTransaction().begin();
+                TypedQuery query = em.createQuery("SELECT b FROM Booking b WHERE b.username = :username", Booking.class).setParameter("username", username);
+                List<Booking> bookings = query.getResultList();
+                for (Booking booking : bookings) {
+                    bookingDTOs.add(new BookingDTO(booking));
+                }
+            } finally {
+                em.close();
+            }
+            return bookingDTOs;
+        }
+    }
     public List<BookingDTO> getAllBookings() {
         {
             EntityManager em = emf.createEntityManager();

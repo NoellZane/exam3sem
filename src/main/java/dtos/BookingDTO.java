@@ -21,8 +21,6 @@ public class BookingDTO {
         this.customerUsername = customerUsername;
         this.hotelID = hotelID;
     }
-
-
     
     public BookingDTO(Booking booking){
         this.ID = booking.getId();
