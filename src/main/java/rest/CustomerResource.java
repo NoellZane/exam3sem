@@ -5,6 +5,7 @@ import com.google.gson.GsonBuilder;
 import dtos.BookingDTO;
 import dtos.CustomerDTO;
 import entities.Customer;
+import errorhandling.BookingNotFoundException;
 import errorhandling.MissingInputException;
 import errorhandling.CustomerAlreadyExistsException;
 import errorhandling.CustomerNotFoundException;
@@ -91,6 +92,16 @@ public class CustomerResource {
         CustomerDTO cAdded = facade.addCustomer(c.getName(),c.getUsername(),c.getPassword(),c.getPhone());
         return GSON.toJson(cAdded);
     }
+    
+    @DELETE
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("admin/{username}")
+    @RolesAllowed("admin")
+    public String deleteCustomer(@PathParam("username") String username) throws CustomerNotFoundException {
+        facade.deleteCustomerAdmin(username);
+        return "{\"status\":\"deleted\"}";
+    }
+    
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_JSON})
@@ -101,10 +112,33 @@ public class CustomerResource {
         BookingDTO bAdded = facade.addBooking(b.getStartDate(), b.getNumberOfNights(), securityContext.getUserPrincipal().getName(), b.getHotelID()); //Using the security context to get the username of the customer
 //        BookingDTO bAdded = facade.addBooking(b.getStartDate(), b.getNumberOfNights(), b.getCustomerUsername(), b.getHotelID());
         return GSON.toJson(bAdded);
-
     }
     
+    @DELETE
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("admin/booking/{id}")
+    @RolesAllowed("admin")
+    public String deleteBooking(@PathParam("id") int id) throws BookingNotFoundException {
+        facade.deleteBookingAdmin(id);
+        return "{\"status\":\"deleted\"}";
+    }
+  
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("allusers")
+    @RolesAllowed("admin")
+    public String getAllCustomers() {
+        return GSON.toJson(facade.getAllCustomers());
+    }
     
+    @GET
+    @Produces(MediaType.APPLICATION_JSON)
+    @Path("allbookings")
+    @RolesAllowed("admin")
+    public String getAllBookings() {
+        return GSON.toJson(facade.getAllBookings());
+    }
+        
     //Functionality I don't have time for!
 ////    
 //    @PUT
@@ -130,19 +164,4 @@ public class CustomerResource {
 //        return "{\"status\":\"deleted\"}";
 //    }
 //    
-    @DELETE
-    @Produces({MediaType.APPLICATION_JSON})
-    @Path("admin/{username}")
-    @RolesAllowed("admin")
-    public String deletePerson(@PathParam("username") String username) throws CustomerNotFoundException {
-        facade.deleteUserAdmin(username);
-        return "{\"status\":\"deleted\"}";
-    }
-    @GET
-    @Produces(MediaType.APPLICATION_JSON)
-    @Path("allusers")
-    @RolesAllowed("admin")
-    public String getAllUsers() {
-        return GSON.toJson(facade.getAllUsers());
-    }
 }
