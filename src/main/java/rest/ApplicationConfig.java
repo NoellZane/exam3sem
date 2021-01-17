@@ -22,10 +22,10 @@ public class ApplicationConfig extends Application {
     private void addRestResourceClasses(Set<Class<?>> resources) {
         resources.add(cors.CorsFilter.class);
         resources.add(errorhandling.API_ExceptionMapper.class);
+        resources.add(errorhandling.CustomerAlreadyExistsMapper.class);
+        resources.add(errorhandling.CustomerNotFoundExceptionMapper.class);
         resources.add(errorhandling.GenericExceptionMapper.class);
         resources.add(errorhandling.MissingInputExceptionMapper.class);
-        resources.add(errorhandling.UserAlreadyExistsMapper.class);
-        resources.add(errorhandling.UserNotFoundExceptionMapper.class);
         resources.add(org.glassfish.jersey.server.wadl.internal.WadlResource.class);
         resources.add(rest.APIResource.class);
         resources.add(rest.CustomerResource.class);

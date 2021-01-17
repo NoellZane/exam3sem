@@ -9,7 +9,8 @@ import entities.Role;
 import entities.Customer;
 import entities.Hotel;
 import errorhandling.MissingInputException;
-import errorhandling.UserAlreadyExistsException;
+import errorhandling.CustomerAlreadyExistsException;
+import errorhandling.CustomerNotFoundException;
 import fetch.Fetcher;
 import java.util.ArrayList;
 import java.util.List;
@@ -65,7 +66,7 @@ public class CustomerFacade {
         return customer;
     }
 
-    public CustomerDTO addCustomer(String name, String username, String password, String phone) throws MissingInputException, UserAlreadyExistsException{ //Add person
+    public CustomerDTO addCustomer(String name, String username, String password, String phone) throws MissingInputException, CustomerAlreadyExistsException{ //Add person
         EntityManager em = getEntityManager();
             Customer addedCustomer = new Customer(name, username, password, phone);
         if (name.length()== 0||username.length() == 0 || password.length() == 0||phone.length()== 0) { //Checks to see if our inputs are empty
@@ -77,7 +78,7 @@ public class CustomerFacade {
            
             List<Customer> customers = query.getResultList(); //Get list of Customers that matches query
             if (customers.size() > 0) { //If Customer size is bigger than zero, that means it exists.
-                throw new UserAlreadyExistsException("Customer already exists, please try another username");
+                throw new CustomerAlreadyExistsException("Customer already exists, please try another username");
             } else {
             addedCustomer.addRole(em.createQuery("SELECT r FROM Role r WHERE r.roleName = :role_name",Role.class).setParameter("role_name", "user").getSingleResult());
             em.persist(addedCustomer);
@@ -95,7 +96,7 @@ public class CustomerFacade {
             List<CustomerDTO> userDTOs = new ArrayList<>();
             try {
                 em.getTransaction().begin();
-                TypedQuery query = em.createQuery("SELECT u FROM User u", Customer.class);
+                TypedQuery query = em.createQuery("SELECT c FROM Customer c", Customer.class);
 //                TypedQuery query = em.createQuery("SELECT u.userName FROM User u", User.class);
                 List<Customer> users = query.getResultList();
                 for (Customer user : users) {
@@ -110,7 +111,7 @@ public class CustomerFacade {
     
     public BookingDTO addBooking(String startDate, int numberOfNights, String customerUsername, int hotelID) throws ExecutionException, TimeoutException, InterruptedException, MissingInputException{
         EntityManager em = getEntityManager();
-        Customer customer = em.find(Customer.class, customerUsername);
+        Customer customer = em.find(Customer.class, customerUsername); //It works though???
         Hotel hotel = em.find(Hotel.class, hotelID);
         if(hotel == null){
             hotel = new Hotel(Fetcher.responseParallelHotelByID(threadPool, GSON,hotelID)); //Added constructor for hotel that takes a hotelDTO
@@ -131,6 +132,8 @@ public class CustomerFacade {
         }
         return new BookingDTO(addedBooking);
     }
+    
+    //This is functionality I would like to add but don't have time for
 //     public CustomerDTO editUser(CustomerDTO u) throws MissingInputException, UserNotFoundException {
 //        EntityManager em = getEntityManager();
 //        if (u.getUsername().length() == 0 || u.getPassword().length() == 0) { //Checks to see if our inputs are empty
@@ -169,22 +172,21 @@ public class CustomerFacade {
 ////        return new UserDTO(user);
 //
 //    }
-//        public void deleteUserAdmin(String username) throws UserNotFoundException {
-//        EntityManager em = getEntityManager();
-//        Customer user = em.find(Customer.class, username);
-//        if (user == null) {
-//            throw new UserNotFoundException(String.format("User with username: (%s) not found", user.getUserName()));
-//        }
-//        try {
-//            em.getTransaction().begin();
-//            em.remove(user);
-//            em.getTransaction().commit();
-//        } finally {
-//            em.close();
-//        }
-////        return new UserDTO(user);
-//
-//    }
+        public void deleteUserAdmin(String username) throws CustomerNotFoundException {
+        EntityManager em = getEntityManager();
+        Customer customer = em.find(Customer.class, username);
+        if (customer == null) {
+            throw new CustomerNotFoundException(String.format("User with username: (%s) not found", customer.getUserName()));
+        }
+        try {
+            em.getTransaction().begin();
+            em.remove(customer);
+            em.getTransaction().commit();
+        } finally {
+            em.close();
+        }
+
+    }
          
          
          

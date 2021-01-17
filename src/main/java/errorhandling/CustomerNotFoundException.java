@@ -1,7 +1,7 @@
 package errorhandling;
 
-public class UserNotFoundException extends Exception {
-    public UserNotFoundException (String message) {
+public class CustomerNotFoundException extends Exception {
+    public CustomerNotFoundException (String message) {
         super(message);
     }
 }

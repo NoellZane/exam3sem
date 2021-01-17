@@ -19,8 +19,8 @@ import utils.HttpUtils;
  * @author Noell Zane
  */
 public class Fetcher {
-    final static String HOTEL_SERVER_ALL = "https://exam.cphdat.dk/hotel/all";
-    final static String HOTEL_SERVER_BY_ID = "https://exam.cphdat.dk/hotel/";
+    final static String HOTEL_SERVER_ALL = "http://exam.cphdat.dk:8000//hotel/all";
+    final static String HOTEL_SERVER_BY_ID = "http://exam.cphdat.dk:8000//hotel/";
 
     
     

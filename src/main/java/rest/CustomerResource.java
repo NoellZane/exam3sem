@@ -6,7 +6,8 @@ import dtos.BookingDTO;
 import dtos.CustomerDTO;
 import entities.Customer;
 import errorhandling.MissingInputException;
-import errorhandling.UserAlreadyExistsException;
+import errorhandling.CustomerAlreadyExistsException;
+import errorhandling.CustomerNotFoundException;
 import facades.CustomerFacade;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -16,12 +17,14 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.TypedQuery;
 import javax.ws.rs.Consumes;
+import javax.ws.rs.DELETE;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.UriInfo;
 import javax.ws.rs.Produces;
 import javax.ws.rs.GET;
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;
+import javax.ws.rs.PathParam;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.SecurityContext;
 import utils.EMF_Creator;
@@ -83,7 +86,7 @@ public class CustomerResource {
     @POST
     @Consumes(MediaType.APPLICATION_JSON)
     @Produces({MediaType.APPLICATION_JSON})
-    public String addCustomer(String customer) throws MissingInputException, UserAlreadyExistsException {
+    public String addCustomer(String customer) throws MissingInputException, CustomerAlreadyExistsException {
         CustomerDTO c = GSON.fromJson(customer, CustomerDTO.class);
         CustomerDTO cAdded = facade.addCustomer(c.getName(),c.getUsername(),c.getPassword(),c.getPhone());
         return GSON.toJson(cAdded);
@@ -95,12 +98,14 @@ public class CustomerResource {
     @RolesAllowed("user")
     public String addBooking(String booking) throws ExecutionException, TimeoutException, InterruptedException, MissingInputException{
         BookingDTO b = GSON.fromJson(booking, BookingDTO.class);
-        BookingDTO bAdded = facade.addBooking(b.getStartDate(), b.getNumberOfNights(), b.getCustomerUsername(), b.getHotelID());
+        BookingDTO bAdded = facade.addBooking(b.getStartDate(), b.getNumberOfNights(), securityContext.getUserPrincipal().getName(), b.getHotelID()); //Using the security context to get the username of the customer
+//        BookingDTO bAdded = facade.addBooking(b.getStartDate(), b.getNumberOfNights(), b.getCustomerUsername(), b.getHotelID());
         return GSON.toJson(bAdded);
 
     }
     
     
+    //Functionality I don't have time for!
 ////    
 //    @PUT
 //    @Produces({MediaType.APPLICATION_JSON})
@@ -125,14 +130,14 @@ public class CustomerResource {
 //        return "{\"status\":\"deleted\"}";
 //    }
 //    
-//    @DELETE
-//    @Produces({MediaType.APPLICATION_JSON})
-//    @Path("admin/{username}")
-//    @RolesAllowed("admin")
-//    public String deletePerson(@PathParam("username") String username) throws UserNotFoundException {
-//        facade.deleteUserAdmin(username);
-//        return "{\"status\":\"deleted\"}";
-//    }
+    @DELETE
+    @Produces({MediaType.APPLICATION_JSON})
+    @Path("admin/{username}")
+    @RolesAllowed("admin")
+    public String deletePerson(@PathParam("username") String username) throws CustomerNotFoundException {
+        facade.deleteUserAdmin(username);
+        return "{\"status\":\"deleted\"}";
+    }
     @GET
     @Produces(MediaType.APPLICATION_JSON)
     @Path("allusers")

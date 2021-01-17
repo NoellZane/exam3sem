@@ -56,7 +56,7 @@ public class Customer implements Serializable {
     @ManyToMany
     private List<Role> roleList = new ArrayList<>();
     
-    @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.REMOVE)
     private List<Booking> bookings = new ArrayList();
 
     @OneToMany(mappedBy = "customer", cascade = CascadeType.PERSIST)
