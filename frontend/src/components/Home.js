@@ -1,9 +1,8 @@
-export default function Home(props) {
+export default function Home() {
     return (
       <div>
         <h2>Home</h2>
-        <p>This is home</p>
-        <p>{props.id}</p>
+        <p>To see hotels, please either register as a customer or log in.</p>
       </div>
     );
   }
